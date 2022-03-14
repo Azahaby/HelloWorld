@@ -5,39 +5,31 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  print-hello:
+  save_hello_world_output:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo hello
-
-  print-world:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo world
-
-  env-var-print:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
       - run:
-          name: "echo an env var that is part of our project"
-          command: echo $USER_NAME
+          name: "saving hello file"
+          command: echo "Hello world" > ~/Desktop/NanoDegree/output.txt
+      - save_workspace:
+          root: ~/Desktop/NanoDegree
+          paths:
+            - output.txt
+  print_output_file:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - attach_workspace:
+          at: ~/Desktop/NanoDegree
+      - run: cat ~/Desktop/NanoDegree/output.txt
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  # say-hello-workflow:
-  #   jobs:
-  #     - say-hello
-  welcome:
+  my_workflow:
     jobs:
-      - print-hello
-      - print-world:
+      - save_hello_world_output
+      - print_output_file:
           requires:
-            - print-hello
-      - env-var-print:
-          requires:
-            - print-world
+            - save_hello_world_output
