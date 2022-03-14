@@ -19,7 +19,7 @@ jobs:
 
   env-var-print:
     docker:
-      - image: cimg/base:2020.01
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
