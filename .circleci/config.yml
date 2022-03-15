@@ -34,7 +34,10 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - pipeline_id
+      - pipeline_id_1 #just remove the _1 for it to be good again
+      - run:
+          command: echo yikes
+          when: on_fail
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
